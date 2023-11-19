@@ -14,11 +14,12 @@ app.get('/echo', (req, res) => {
 })
 
 app.get("/all", async (req, res) => {
+    console.log(pool.options)
     try {
         const result = await pool.query(query.allDrinks);
         res.json(result.rows)
     } catch (err) {
-        res.json({ "error": err.message })
+        res.json({ error: err.message, debug: pool.options })
     }
 })
 
