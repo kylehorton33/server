@@ -28,7 +28,10 @@ app.get("/:slug", async (req, res) => {
     try {
         const result = await pool.query(query.drinkByName, [slug]);
         if (result.rows.length) {
-            res.json(result.rows)
+            let drink = result.rows[0]
+            const recipe = await pool.query(query.recipeByDrinkName, [slug])
+            drink["recipe"] = recipe.rows
+            res.json(drink)
         } else {
             res.json({ "error": `No results found for '${slug}'`})
         }

@@ -27,10 +27,16 @@ const drinkByName = `
     GROUP BY drink.name;
     `
 
+const recipeByDrinkName = `
+    SELECT amount, ingredient
+    FROM recipe
+    WHERE recipe.drink = $1;
+`
+
 const now = `SELECT NOW()`;
 
 export const query = {
     allDrinks,
     drinkByName,
-    now
+    now, recipeByDrinkName
 }
