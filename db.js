@@ -9,33 +9,9 @@ export const pool = new Pool({
     database: process.env.DATABASE
 });
 
-const allDrinks = `
-    SELECT
-        drink.name,
-        STRING_AGG(recipe.ingredient, ', ') AS ingredients,
-        drink.instructions
-    FROM drink JOIN recipe ON drink.name = recipe.drink
-    GROUP BY drink.name;
-    `
-const drinkByName = `
-    SELECT
-    drink.name,
-    STRING_AGG(recipe.ingredient, ', ') AS ingredients,
-    drink.instructions
-    FROM drink JOIN recipe ON drink.name = recipe.drink
-    WHERE drink.name = $1
-    GROUP BY drink.name;
-    `
-
-const recipeByDrinkName = `
-    SELECT amount, ingredient
-    FROM recipe
-    WHERE recipe.drink = $1;
-`
-
-const createNewDrink = `
-    INSERT INTO drink (name, instructions)
-    VALUES ($1, $2); 
+const allDrinks = `SELECT name, recipe, instructions FROM drink`;
+const drinkByName = `SELECT name, recipe, instructions FROM drink WHERE name = $1`;
+const createNewDrink = `INSERT INTO drink (name, recipe, instructions) VALUES ($1, $2, $3); 
 `
 
 const now = `SELECT NOW()`;
@@ -43,6 +19,6 @@ const now = `SELECT NOW()`;
 export const query = {
     allDrinks,
     drinkByName,
-    now, recipeByDrinkName,
+    now,
     createNewDrink,
 }

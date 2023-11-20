@@ -30,14 +30,8 @@ app.get("/:slug", async (req, res) => {
     const slug = req.params.slug;
     try {
         const result = await pool.query(query.drinkByName, [slug]);
-        if (result.rows.length) {
-            let drink = result.rows[0]
-            const recipe = await pool.query(query.recipeByDrinkName, [slug])
-            drink["recipe"] = recipe.rows
-            res.json(drink)
-        } else {
-            res.json({ "error": `No results found for '${slug}'`})
-        }
+        console.log(result)
+        res.json(result.rows[0])
     } catch (err) {
         res.json({ "error": err.message })
     }
@@ -46,8 +40,8 @@ app.get("/:slug", async (req, res) => {
 app.post("/new", async (req, res) => {
     const newDrink = req.body;
     try {
-        const { name, instructions } = newDrink;
-        const result = await pool.query(query.createNewDrink, [name, instructions])
+        const { name, recipe, instructions } = newDrink;
+        const result = await pool.query(query.createNewDrink, [name, recipe, instructions])
         res.json(result)
     } catch (err) {
         res.json({ "error": err.message })
