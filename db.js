@@ -33,10 +33,16 @@ const recipeByDrinkName = `
     WHERE recipe.drink = $1;
 `
 
+const createNewDrink = `
+    INSERT INTO drink (name, instructions)
+    VALUES ($1, $2); 
+`
+
 const now = `SELECT NOW()`;
 
 export const query = {
     allDrinks,
     drinkByName,
-    now, recipeByDrinkName
+    now, recipeByDrinkName,
+    createNewDrink,
 }

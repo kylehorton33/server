@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 const app = express()
 app.use(cors())
+app.use(express.json()); 
 const port = process.env.PORT || 5000;
 
 import 'dotenv/config'
@@ -37,6 +38,17 @@ app.get("/:slug", async (req, res) => {
         } else {
             res.json({ "error": `No results found for '${slug}'`})
         }
+    } catch (err) {
+        res.json({ "error": err.message })
+    }
+})
+
+app.post("/new", async (req, res) => {
+    const newDrink = req.body;
+    try {
+        const { name, instructions } = newDrink;
+        const result = await pool.query(query.createNewDrink, [name, instructions])
+        res.json(result)
     } catch (err) {
         res.json({ "error": err.message })
     }
